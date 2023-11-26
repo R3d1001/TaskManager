@@ -194,13 +194,14 @@
 <div class="container">
   <div class="sidebar">
     <ul class="task-list">
-      <li style="background-color: lightgray"><a th:href="@{/tasklist}">Create Task</a></li>
-      <li th:each="task : ${tasks}">
-        <form th:action="@{/tasklist}" method="post">
-<!--          <li><input type="submit" th:text="${task.name}" /></li>-->
-        </form>
-      </li>
+      <li style="background-color:lightgray"><a href="createtask">Create Task</a></li>
+      <div  th:each="task : ${tasklist}">
+        <From th:action="@{/api/tasklist}" method="post">
+          <li><input type="button" th:text="${task.name}"></li>
+        </From>
+      </div>
     </ul>
+
   </div>
   <div class="task-details">
     <h2 th:text="${Task.name}"></h2>
