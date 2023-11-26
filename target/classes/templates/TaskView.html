@@ -188,6 +188,24 @@
     .task-details input[type="submit"]:hover {
       background-color: #3e8e41;
     }
+    .sidebar a {
+		  text-decoration:none;
+		  color:black;
+		  align-text:center;
+		}
+
+		.sidebar a:visited {
+		  text-decoration:none;
+		  color:black;
+		  align-text:center;
+		}
+
+	    .sidebar a:hover {
+		  text-decoration:none;
+		  align-text:center;
+		  color:black;
+		}
+
   </style>
 </head>
 <body>
@@ -196,12 +214,9 @@
     <ul class="task-list">
       <li style="background-color:lightgray"><a href="createtask">Create Task</a></li>
       <div  th:each="task : ${tasklist}">
-        <From th:action="@{/api/tasklist}" method="post">
-          <li><input type="button" th:text="${task.name}"></li>
-        </From>
+          <li><a th:href="'tasklist?task=' + ${task.taskID}" type="button" th:text="${task.name}"></a></li>
       </div>
     </ul>
-
   </div>
   <div class="task-details">
     <h2 th:text="${Task.name}"></h2>
