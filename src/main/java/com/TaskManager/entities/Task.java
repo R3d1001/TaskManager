@@ -8,10 +8,10 @@ import java.sql.Date;
 @Entity
 public class Task {
     @Id
-    public int TaskID;
-    public String Name, Description;
-    public Date CreationDate, SetDueDate;
-    public String Status;
-    public int Priority, OwnerUserID;
+    public int taskID;
+    public String name, description;
+    public Date creationDate, setDueDate;
+    public String status;
+    public int priority, ownerUserID;
 
 }
