@@ -5,6 +5,9 @@ import com.TaskManager.entities.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,8 +26,10 @@ public class UserController {
     }
 
     @GetMapping("/api/users/byemail")
-    public ResponseEntity<Users> getUsersbyEmail(@RequestParam(name = "Email",defaultValue = "abc@xyz.com") String Email){
-        return new ResponseEntity<Users>(userRepository.findByEmail(Email), HttpStatus.OK);
+    public ResponseEntity<Users> getUsersbyEmail(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return new ResponseEntity<Users>(userRepository.findByEmail(userDetails.getUsername()), HttpStatus.OK);
     }
 
 

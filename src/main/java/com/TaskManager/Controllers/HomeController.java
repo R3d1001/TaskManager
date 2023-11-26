@@ -8,7 +8,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String homePage(){
-        return "home";
+        return "redirect:/createtask";
     }
 
 }

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Task Manager</title>
+  <style>
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: Arial, sans-serif;
+		}
+		.container {
+			display: flex;
+			flex-direction: row;
+			height: 100vh;
+		}
+		.sidebar {
+			background-color: #727272;
+			width: 20%;
+			height: 100%;
+			overflow-y: scroll;
+			padding: 20px;
+		}
+		.task-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+		.task-list li {
+			padding: 10px;
+			margin-bottom: 10px;
+			background-color: #ffffff;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		.task-list li:hover {
+			background-color: #f1f378;
+		}
+		.task-list li.active {
+			background-color: #598eff;
+		}
+		.task-details {
+			background-color: #fff;
+			width: 80%;
+			height: 100%;
+			padding: 20px;
+		}
+		.task-details h2 {
+			margin-top: 0;
+		}
+		.task-details form {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+		.task-details input[type="text"], select {
+			margin-bottom: 10px;
+			padding: 10px;
+			border-radius: 5px;
+			border: none;
+			width: 100%;
+			box-sizing: border-box;
+		}
+		.task-details input[type="submit"] {
+			background-color: #4CAF50;
+			color: #fff;
+			padding: 10px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		.task-details input[type="submit"]:hover {
+			background-color: #3e8e41;
+		}
+	</style>
+</head>
+<body>
+<div class="container">
+  <div class="sidebar">
+    <ul class="task-list">
+      <li style="background-color:lightgray"><a href="tasklist">Create Task</a></li>
+      <div  th:each="task : ${tasks}">
+        <From th:action="@{/api/tasklist}" method="post">
+          <li><input type="button" th:text="${task.name}"></li>
+        </From>
+      </div>
+    </ul>
+
+  </div>
+  <div class="task-details">
+    <h2>Create Task</h2>
+    <form th:action="@{/api/createtask}" method="post">
+      <input type="text" placeholder="Task Name" name="name">
+      <select name="priority">
+        <option value="1">Low Priority</option>
+        <option value="2">Medium Priority</option>
+        <option value="3">High Priority</option>
+      </select>
+      <input type="text" placeholder="Description" name="description">
+      <input type="text" placeholder="Due Date" name="DueDate">
+      <input type="submit" value="Create Task">
+    </form>
+  </div>
+</div>
+
+
+<script th:inline="javascript">
+        function redirectTo(url) {
+            window.location.href = /*[[@{/}]]*/ url;
+        }
+</script>
+
+</body>
+</html>

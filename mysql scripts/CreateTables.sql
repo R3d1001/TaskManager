@@ -3,14 +3,13 @@ USE TaskManager;
 
 ALTER TABLE `Tasks` DROP FOREIGN KEY `Tasks_fk1`;
 DROP TABLE SubTasks;
+DROP TABLE Sub_Tasks;
 DROP TABLE UserTask;
+DROP TABLE User_Task;
 DROP TABLE Comments;
 DROP TABLE Tasks;
 DROP TABLE Users;
 
-CREATE TABLE dummy (
-	id int primary key
-);
 
 CREATE TABLE Users (
 	`id` INT(5) NOT NULL AUTO_INCREMENT UNIQUE,
@@ -22,18 +21,20 @@ CREATE TABLE Users (
 	`gender` char(1) NOT NULL,
 	PRIMARY KEY (`id`)
 );
+select * from users;
 
 CREATE TABLE `Tasks` (
 	`taskID` INT NOT NULL AUTO_INCREMENT UNIQUE,
 	`name` TEXT NOT NULL,
 	`description` TEXT NOT NULL,
-	`creationDate` DATE NOT NULL,
-	`setDueDate` DATE NOT NULL,
+	`creationDate` DATETIME NOT NULL,
+	`setDueDate` DATeTIME NOT NULL,
 	`status` TEXT NOT NULL,
 	`priority` INT NOT NULL,
-	`ownerUserID` int NOT NULL UNIQUE,
+	`ownerUserID` int NOT NULL,
 	PRIMARY KEY (`taskID`)
 );
+
 
 CREATE TABLE `SubTasks` (
 	`subtaskID` INT NOT NULL AUTO_INCREMENT,

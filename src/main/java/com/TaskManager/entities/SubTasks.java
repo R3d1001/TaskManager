@@ -1,20 +1,18 @@
 package com.TaskManager.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import java.sql.Date;
 
 @Entity
 public class SubTasks {
     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     public int SubtaskID;
 
     @ManyToOne
     @JoinColumn(name="parentTaskID")
-    public Task parentTask;
+    public Tasks parentTask;
     public String title, description;
     public Date dueDate;
     public String status;
