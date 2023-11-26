@@ -12,11 +12,11 @@ public class Comments {
     public int id;
 
     @ManyToOne
-    @JoinColumn(name = "TaskID")
+    @JoinColumn(name = "taskID")
     public Task task;
 
     @ManyToOne
-    @JoinColumn(name = "UserID")
-    public User user;
+    @JoinColumn(name = "userID")
+    public Users users;
 
 }

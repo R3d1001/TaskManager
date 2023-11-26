@@ -9,12 +9,12 @@ public class UserTask {
     @Id
     @ManyToOne
     @JoinColumn(name = "id")
-    public User user;
+    public Users user;
 
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "TaskID")
+    @JoinColumn(name = "taskID")
     public Task task;
 
 }

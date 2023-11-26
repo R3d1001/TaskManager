@@ -13,14 +13,14 @@ public class SubTasks {
     public int SubtaskID;
 
     @ManyToOne
-    @JoinColumn(name="ParentTaskID")
-    public Task ParentTask;
-    public String Title, Description;
-    public Date DueDate;
-    public String Status;
-    public String Priority;
+    @JoinColumn(name="parentTaskID")
+    public Task parentTask;
+    public String title, description;
+    public Date dueDate;
+    public String status;
+    public String priority;
 
     @ManyToOne
-    @JoinColumn(name = "AssignedTo")
-    public User AssignedTo;
+    @JoinColumn(name = "assignedTo")
+    public Users assignedTo;
 }

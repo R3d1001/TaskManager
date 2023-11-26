@@ -8,40 +8,43 @@ DROP TABLE Comments;
 DROP TABLE Tasks;
 DROP TABLE Users;
 
+CREATE TABLE dummy (
+	id int primary key
+);
 
-CREATE TABLE `Users` (
+CREATE TABLE Users (
 	`id` INT(5) NOT NULL AUTO_INCREMENT UNIQUE,
-	`Username` varchar(20) NOT NULL UNIQUE,
-	`Password` varchar(20) NOT NULL,
-	`Email` varchar(50) NOT NULL UNIQUE,
-	`FirstName` TEXT(20) NOT NULL,
-	`LastName` TEXT(20) NOT NULL,
-	`Gender` char(1) NOT NULL,
+	`username` varchar(20) NOT NULL UNIQUE,
+	`password` varchar(255) NOT NULL,
+	`email` varchar(50) NOT NULL UNIQUE,
+	`firstName` TEXT(20) NOT NULL,
+	`lastName` TEXT(20) NOT NULL,
+	`gender` char(1) NOT NULL,
 	PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `Tasks` (
-	`TaskID` INT NOT NULL AUTO_INCREMENT UNIQUE,
-	`Name` TEXT NOT NULL,
-	`Description` TEXT NOT NULL,
-	`CreationDate` DATE NOT NULL,
-	`SetDueDate` DATE NOT NULL,
-	`Status` TEXT NOT NULL,
-	`Priority` INT NOT NULL,
-	`OwnerUserID` int NOT NULL UNIQUE,
-	PRIMARY KEY (`TaskID`)
+	`taskID` INT NOT NULL AUTO_INCREMENT UNIQUE,
+	`name` TEXT NOT NULL,
+	`description` TEXT NOT NULL,
+	`creationDate` DATE NOT NULL,
+	`setDueDate` DATE NOT NULL,
+	`status` TEXT NOT NULL,
+	`priority` INT NOT NULL,
+	`ownerUserID` int NOT NULL UNIQUE,
+	PRIMARY KEY (`taskID`)
 );
 
 CREATE TABLE `SubTasks` (
-	`SubtaskID` INT NOT NULL AUTO_INCREMENT,
-	`ParentTaskID` INT NOT NULL,
-	`Title` varchar(255) NOT NULL,
-	`Description` TEXT NOT NULL,
-	`DueDate` DATE NOT NULL,
-	`Status` TEXT NOT NULL,
-	`Priority` TEXT NOT NULL,
-	`AssignedTO` INT NOT NULL,
-	PRIMARY KEY (`SubtaskID`)
+	`subtaskID` INT NOT NULL AUTO_INCREMENT,
+	`parentTaskID` INT NOT NULL,
+	`title` varchar(255) NOT NULL,
+	`description` TEXT NOT NULL,
+	`dueDate` DATE NOT NULL,
+	`status` TEXT NOT NULL,
+	`priority` TEXT NOT NULL,
+	`assignedTO` INT NOT NULL,
+	PRIMARY KEY (`subtaskID`)
 );
 
 CREATE TABLE `UserTask` (
@@ -52,26 +55,29 @@ CREATE TABLE `UserTask` (
 
 CREATE TABLE `Comments` (
 	`id` INT NOT NULL AUTO_INCREMENT,
-	`TaskID` INT NOT NULL,
-	`Description` TEXT NOT NULL,
-	`UserID` INT NOT NULL,
+	`taskID` INT NOT NULL,
+	`description` TEXT NOT NULL,
+	`userID` INT NOT NULL,
 	PRIMARY KEY (`id`)
 );
 
 
-ALTER TABLE `Tasks` ADD CONSTRAINT `Tasks_fk1` FOREIGN KEY (`OwnerUserID`) REFERENCES `Users`(`id`);
+ALTER TABLE `Tasks` ADD CONSTRAINT `Tasks_fk1` FOREIGN KEY (`ownerUserID`) REFERENCES `Users`(`id`);
 
-ALTER TABLE `SubTasks` ADD CONSTRAINT `SubTasks_fk0` FOREIGN KEY (`ParentTaskID`) REFERENCES `Tasks`(`TaskID`);
+ALTER TABLE `SubTasks` ADD CONSTRAINT `SubTasks_fk0` FOREIGN KEY (`parentTaskID`) REFERENCES `Tasks`(`taskID`);
 
-ALTER TABLE `SubTasks` ADD CONSTRAINT `SubTasks_fk1` FOREIGN KEY (`AssignedTO`) REFERENCES `Users`(`id`);
+ALTER TABLE `SubTasks` ADD CONSTRAINT `SubTasks_fk1` FOREIGN KEY (`assignedTO`) REFERENCES `Users`(`id`);
 
 ALTER TABLE `UserTask` ADD CONSTRAINT `UserTask_fk0` FOREIGN KEY (`id`) REFERENCES `Users`(`id`);
 
-ALTER TABLE `UserTask` ADD CONSTRAINT `UserTask_fk1` FOREIGN KEY (`TaskID`) REFERENCES `Tasks`(`TaskID`);
+ALTER TABLE `UserTask` ADD CONSTRAINT `UserTask_fk1` FOREIGN KEY (`taskID`) REFERENCES `Tasks`(`taskID`);
 
-ALTER TABLE `Comments` ADD CONSTRAINT `Comments_fk0` FOREIGN KEY (`TaskID`) REFERENCES `Tasks`(`TaskID`);
+ALTER TABLE `Comments` ADD CONSTRAINT `Comments_fk0` FOREIGN KEY (`taskID`) REFERENCES `Tasks`(`taskID`);
 
-ALTER TABLE `Comments` ADD CONSTRAINT `Comments_fk1` FOREIGN KEY (`UserID`) REFERENCES `Users`(`id`);
+ALTER TABLE `Comments` ADD CONSTRAINT `Comments_fk1` FOREIGN KEY (`userID`) REFERENCES `users`(`id`);
+
+
+
 
 
 
