@@ -77,7 +77,7 @@
 <div class="container">
   <div class="sidebar">
     <ul class="task-list">
-      <li style="background-color:lightgray"><a href="tasklist">Create Task</a></li>
+      <li style="background-color:lightgray"><a href="createtask">Create Task</a></li>
       <div  th:each="task : ${tasks}">
         <From th:action="@{/api/tasklist}" method="post">
           <li><input type="button" th:text="${task.name}"></li>
@@ -88,7 +88,7 @@
   </div>
   <div class="task-details">
     <h2>Create Task</h2>
-    <form th:action="@{/api/createtask}" method="post">
+    <form th:action="@{/createtask}" method="post">
       <input type="text" placeholder="Task Name" name="name">
       <select name="priority">
         <option value="1">Low Priority</option>

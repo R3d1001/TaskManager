@@ -46,11 +46,11 @@ public class TaskController {
         if(input == -1) task = tasks.get(0);
         else task = taskRepository.findByTaskID(input).get(0);
         model.addAttribute("Task", task);
-        model.addAttribute("tasks", userTasksRepository.findByEmail(userDetails.getUsername()));
+        model.addAttribute("tasklist", userTasksRepository.findByEmail(userDetails.getUsername()));
             return "TaskView";
     }
 
-    @PostMapping(path="/api/createtask") // Map ONLY POST Requests
+    @PostMapping(path="/createtask") // Map ONLY POST Requests
     public String addNewTask (@RequestParam String name, @RequestParam String description,
                               @RequestParam String DueDate, @RequestParam int priority) {
         // @ResponseBody means the returned String is the response, not a view name
@@ -75,7 +75,7 @@ public class TaskController {
         ut.user = u;
         userTasksRepository.save(ut);
 
-        return "redirect:tasklist";
+        return "redirect:createtask";
     }
 
     @GetMapping("/createtask")
