@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,11 +35,19 @@ public class TaskController {
     @Autowired
     TaskRepository taskRepository;
 
-    @GetMapping("/api/tasklist")
-    public ResponseEntity<List<Tasks>> GetTasks(){
+    @GetMapping("tasklist")
+    public String GetTasks(Model model, @RequestParam(name="task", defaultValue = "-1") String taskID ){
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return new ResponseEntity<List<Tasks>>(userTasksRepository.findByEmail(userDetails.getUsername()), HttpStatus.OK);
+        List<Tasks> tasks = userTasksRepository.findByEmail(userDetails.getUsername());
+        int input = Integer.parseInt(taskID);
+        Tasks task;
+        if(input == -1) task = tasks.get(0);
+        else task = taskRepository.findByTaskID(input).get(0);
+        model.addAttribute("Task", task);
+        model.addAttribute("tasks", userTasksRepository.findByEmail(userDetails.getUsername()));
+            return "TaskView";
     }
 
     @PostMapping(path="/api/createtask") // Map ONLY POST Requests
@@ -66,12 +75,30 @@ public class TaskController {
         ut.user = u;
         userTasksRepository.save(ut);
 
-        return "redirect:/api/tasklist";
+        return "redirect:tasklist";
     }
 
     @GetMapping("/createtask")
-    public String CreateTask(){
+    public String CreateTask(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        model.addAttribute("tasks",userTasksRepository.findByEmail(userDetails.getUsername()));
         return "TaskCreation";
+    }
+
+    @GetMapping("/api/tasklist")
+    public ResponseEntity<Tasks> GetTasksapi(Model model, @RequestParam(name="task", defaultValue = "-1") String taskID ){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        List<Tasks> tasks = userTasksRepository.findByEmail(userDetails.getUsername());
+        int input = Integer.parseInt(taskID);
+        Tasks task;
+        if(input == -1) task = tasks.get(0);
+        else task = taskRepository.findByTaskID(input).get(0);
+        model.addAttribute("Task", task);
+        model.addAttribute("tasks", tasks);
+        return new ResponseEntity<Tasks>(task, HttpStatus.OK );
     }
 
 }
