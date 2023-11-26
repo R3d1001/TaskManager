@@ -1,0 +1,239 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <title>Task Manager</title>-->
+<!--  <style>-->
+<!--		body {-->
+<!--			margin: 0;-->
+<!--			padding: 0;-->
+<!--			font-family: Arial, sans-serif;-->
+<!--		}-->
+<!--		.container {-->
+<!--			display: flex;-->
+<!--			flex-direction: row;-->
+<!--			height: 100vh;-->
+<!--		}-->
+<!--		.sidebar {-->
+<!--			background-color: #727272;-->
+<!--			width: 20%;-->
+<!--			height: 100%;-->
+<!--			overflow-y: scroll;-->
+<!--			padding: 20px;-->
+<!--		}-->
+<!--		.task-list {-->
+<!--			list-style: none;-->
+<!--			padding: 0;-->
+<!--			margin: 0;-->
+<!--		}-->
+<!--		.task-list li {-->
+<!--			padding: 10px;-->
+<!--			margin-bottom: 10px;-->
+<!--			background-color: #ffffff;-->
+<!--			border-radius: 5px;-->
+<!--			cursor: pointer;-->
+<!--		}-->
+<!--		.task-list li:hover {-->
+<!--			background-color: #f1f378;-->
+<!--		}-->
+<!--		.task-list li.active {-->
+<!--			background-color: #598eff;-->
+<!--		}-->
+<!--		.task-details {-->
+<!--			background-color: #fff;-->
+<!--			width: 80%;-->
+<!--			height: 100%;-->
+<!--			padding: 20px;-->
+<!--		}-->
+<!--		.task-details h2 {-->
+<!--			margin-top: 0;-->
+<!--		}-->
+<!--		.task-details form {-->
+<!--			display: flex;-->
+<!--			flex-direction: column;-->
+<!--			align-items: center;-->
+<!--		}-->
+<!--		.task-details input[type="text"], select {-->
+<!--			margin-bottom: 10px;-->
+<!--			padding: 10px;-->
+<!--			border-radius: 5px;-->
+<!--			border: none;-->
+<!--			width: 100%;-->
+<!--			box-sizing: border-box;-->
+<!--		}-->
+<!--		.task-details input[type="submit"] {-->
+<!--			background-color: #4CAF50;-->
+<!--			color: #fff;-->
+<!--			padding: 10px;-->
+<!--			border: none;-->
+<!--			border-radius: 5px;-->
+<!--			cursor: pointer;-->
+<!--		}-->
+<!--		.task-details input[type="submit"]:hover {-->
+<!--			background-color: #3e8e41;-->
+<!--		}-->
+<!--	</style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container">-->
+<!--  <div class="sidebar">-->
+<!--    <ul class="task-list">-->
+<!--      <li style="background-color:lightgray"><a href="tasklist">Create Task</a></li>-->
+<!--      <div  th:each="task : ${tasks}">-->
+<!--        <From th:action="@{/api/tasklist}" method="post">-->
+<!--          <li><input type="button" th:text="${task.name}"></li>-->
+<!--        </From>-->
+<!--      </div>-->
+<!--    </ul>-->
+
+<!--  </div>-->
+<!--  <div class="task-details">-->
+<!--    <h2 th:text="${Task.name}"></h2>-->
+<!--    <table>-->
+<!--      <tr th:text="${Task.description}"></tr>-->
+<!--      <tr th:text="${Task.creationDate}"></tr>-->
+<!--      <tr th:text="${Task.setDueDate}"></tr>-->
+<!--      <tr th:text="${Task.status}"></tr>-->
+<!--      <tr th:text="${Task.priority}"></tr>-->
+<!--    </table>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<!--<script th:inline="javascript">-->
+<!--        function redirectTo(url) {-->
+<!--            window.location.href = /*[[@{/}]]*/ url;-->
+<!--        }-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Task Manager</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+    }
+    .sidebar {
+      background-color: #727272;
+      width: 20%;
+      height: 100%;
+      overflow-y: scroll;
+      padding: 20px;
+    }
+    .task-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .task-list li {
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #ffffff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .task-list li:hover {
+      background-color: #f1f378;
+    }
+    .task-list li.active {
+      background-color: #598eff;
+    }
+    .task-details {
+      background-color: #fff;
+      width: 80%;
+      height: 100%;
+      padding: 20px;
+    }
+    .task-details h2 {
+      margin-top: 0;
+    }
+    .task-details table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    .task-details table tr {
+      border-bottom: 1px solid #ddd;
+    }
+    .task-details table th, .task-details table td {
+      padding: 10px;
+      text-align: left;
+    }
+    .task-details input[type="text"], .task-details select {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .task-details input[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .task-details input[type="submit"]:hover {
+      background-color: #3e8e41;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="sidebar">
+    <ul class="task-list">
+      <li style="background-color: lightgray"><a th:href="@{/tasklist}">Create Task</a></li>
+      <li th:each="task : ${tasks}">
+        <form th:action="@{/tasklist}" method="post">
+          <li><input type="submit" th:text="${task.name}" /></li>
+        </form>
+      </li>
+    </ul>
+  </div>
+  <div class="task-details">
+    <h2 th:text="${Task.name}"></h2>
+    <table>
+      <tr>
+        <th>Description:</th>
+        <td th:text="${Task.description}"></td>
+      </tr>
+      <tr>
+        <th>Creation Date:</th>
+        <td th:text="${Task.creationDate}"></td>
+      </tr>
+      <tr>
+        <th>Due Date:</th>
+        <td th:text="${Task.setDueDate}"></td>
+      </tr>
+      <tr>
+        <th>Status:</th>
+        <td th:text="${Task.status}"></td>
+      </tr>
+      <tr>
+        <th>Priority:</th>
+        <td th:text="${Task.priority}"></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<script th:inline="javascript">
+    function redirectTo(url) {
+        window.location.href = /*[[@{/}]]*/ url;
+    }
+</script>
+
+</body>
+</html>
