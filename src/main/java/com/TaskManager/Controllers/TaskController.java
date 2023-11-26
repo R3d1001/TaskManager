@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Controller
@@ -42,7 +43,7 @@ public class TaskController {
 
     @PostMapping(path="/api/createtask") // Map ONLY POST Requests
     public String addNewTask (@RequestParam String name, @RequestParam String description,
-                              @RequestParam Date DueDate, @RequestParam int priority) {
+                              @RequestParam String DueDate, @RequestParam int priority) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
 
@@ -50,14 +51,16 @@ public class TaskController {
         t.name = name;
         t.description = description;
         t.priority = priority;
-        t.creationDate = "2030-02-15 04:34:33.000000";
+        t.creationDate = new Timestamp(System.currentTimeMillis());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String email = userDetails.getUsername();
         Users u = userRepository.findByEmail(email);
         t.owner = u;
-        taskRepository.save(t);
+        t.setDueDate = Timestamp.valueOf(DueDate);
         t.status = "incomplete";
+        taskRepository.save(t);
+
         UserTask ut = new UserTask();
         ut.task = t;
         ut.user = u;

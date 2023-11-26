@@ -3,6 +3,7 @@ package com.TaskManager.entities;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 public class Tasks {
@@ -10,7 +11,7 @@ public class Tasks {
     @GeneratedValue(strategy=GenerationType.AUTO)
     public int taskID;
     public String name, description;
-    public String creationDate, setDueDate;
+    public Timestamp creationDate, setDueDate;
     public String status;
     public int priority;
 
