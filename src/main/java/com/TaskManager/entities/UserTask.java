@@ -15,6 +15,6 @@ public class UserTask {
     @Id
     @ManyToOne
     @JoinColumn(name = "taskID")
-    public Task task;
+    public Tasks task;
 
 }

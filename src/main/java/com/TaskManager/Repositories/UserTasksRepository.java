@@ -1,6 +1,6 @@
 package com.TaskManager.Repositories;
 
-import com.TaskManager.entities.Task;
+import com.TaskManager.entities.Tasks;
 import com.TaskManager.entities.UserTask;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -13,6 +13,6 @@ import java.util.List;
 public interface UserTasksRepository extends CrudRepository<UserTask, Integer> {
 
     @Query("SELECT task FROM UserTask ut WHERE ut.user.email = :email")
-    List<Task> findByEmail(@Param("email") String email);
+    List<Tasks> findByEmail(@Param("email") String email);
 
 }
