@@ -231,15 +231,6 @@
   </style>
 </head>
 <body>
-<div class="container">
-  <div class="sidebar">
-    <ul class="task-list">
-      <li style="background-color:lightgray"><a href="createtask">Create Task</a></li>
-      <div  th:each="task : ${tasklist}">
-          <li><a th:href="'tasklist?task=' + ${task.taskID}" type="button" th:text="${task.name}"></a></li>
-      </div>
-    </ul>
-  </div>
   <div class="task-details">
     <h2 th:text="${Task.name}"></h2>
     <table>
@@ -284,14 +275,6 @@
         </tr>
       </div>
     </table>
-
-    <form th:action="@{'/api/addcomment?taskID=' + ${Task.taskID}}" method="post">
-
-      <label for="Description">Add Comment:</label>
-      <input type="Description" name="Description" id="Description" />
-      <input type="submit" value="Post" />
-    </form>
-
 
   </div>
 </div>

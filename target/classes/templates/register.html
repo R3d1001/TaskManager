@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Login</title>
+    <title>Registration</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -60,26 +60,36 @@
 </head>
 <body>
 <div class="container">
-    <h2>Login</h2>
-    <div th:if="${param.error}" class="error-message">
-        Invalid username and password.
-    </div>
-    <div th:if="${param.logout}" class="error-message">
-        You have been logged out.
-    </div>
-
-    <form th:action="@{/login}" method="post">
-        <label for="username">Email:</label>
+    <h2>Register</h2>
+    <form th:action="@{/register}" method="post">
+        <label for="username">User Name:</label>
         <input type="text" name="username" id="username" />
+
+        <label for="email">Email:</label>
+        <input type="text" name="email" id="email" />
 
         <label for="password">Password:</label>
         <input type="password" name="password" id="password" />
 
-        <input type="submit" value="Sign In" />
+        <label for="firstName">First Name:</label>
+        <input type="text" name="firstName" id="firstName" />
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" name="lastName" id="lastName" />
+
+        <!--        <label >Gender:</label>-->
+        <!--        <select id="gender" name="gender" th:field="${gender}">-->
+        <!--            &lt;!&ndash; Iterating over the list of countries &ndash;&gt;-->
+        <!--            <option th:value="M" th:text="Male"></option>-->
+        <!--            <option th:value="F" th:text="Female"></option>-->
+        <!--        </select>-->
+
+
+        <input type="submit" value="Register" />
     </form>
 
-    <form action="/register" method="get">
-        <input href="/register" type="submit" value="Register"/>
+    <form action="/login" method="get">
+        <input type="submit" value="Sign In"/>
     </form>
 
 </div>
