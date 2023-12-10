@@ -189,23 +189,45 @@
       background-color: #3e8e41;
     }
     .sidebar a {
-		  text-decoration:none;
-		  color:black;
-		  align-text:center;
-		}
+      text-decoration: none;
+      color: black;
+      align-text: center;
+    }
 
-		.sidebar a:visited {
-		  text-decoration:none;
-		  color:black;
-		  align-text:center;
-		}
+    .sidebar a:visited {
+      text-decoration: none;
+      color: black;
+      align-text: center;
+    }
 
-	    .sidebar a:hover {
-		  text-decoration:none;
-		  align-text:center;
-		  color:black;
-		}
+    .sidebar a:hover {
+      text-decoration: none;
+      align-text: center;
+      color: black;
+    }
 
+    /* Added Styles for Comments Section */
+    .comments-section {
+      padding-top: 2em;
+    }
+
+    .comments-section table {
+      margin-top: 1em;
+    }
+
+    /* Form Styles */
+    form {
+      margin-top: 1em;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5em;
+    }
+
+    input[type="text"] {
+      margin-bottom: 1em;
+    }
   </style>
 </head>
 <body>
@@ -241,7 +263,37 @@
         <th>Priority:</th>
         <td th:text="${Task.priority}"></td>
       </tr>
+
+      <tr>
+        <th>Collaborators:</th>
+        <td th:text="${userList}"></td>
+      </tr>
+
     </table>
+
+    <h3 style="padding-top: 2em">Comments</h3>
+    <table>
+      <tr>
+        <th>User</th>
+        <th>Description</th>
+      </tr>
+      <div th:each="comment : ${Comments}">
+        <tr>
+          <td th:text="${comment.users.username}"></td>
+          <td th:text="${comment.Description}"></td>
+        </tr>
+      </div>
+    </table>
+
+    <form th:action="@{'/api/addcomment?taskID=' + ${Task.taskID}}" method="post">
+
+      <label for="Description">Add Comment:</label>
+      <input type="Description" name="Description" id="Description" />
+      <input type="submit" value="Post" />
+    </form>
+
+    <a th:href="${generatedPdfFilePath}" download="generatedTaskList.pdf">Download Generated PDF</a>
+
   </div>
 </div>
 

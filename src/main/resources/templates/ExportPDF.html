@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Task Manager</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+    }
+    .task-details {
+      background-color: #fff;
+      width: 80%;
+      height: 100%;
+      padding: 20px;
+    }
+    .task-details h2 {
+      margin-top: 0;
+    }
+    .task-details table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    .task-details table tr {
+      border-bottom: 1px solid #ddd;
+    }
+    .task-details table th, .task-details table td {
+      padding: 10px;
+      text-align: left;
+    }
+    .task-details input[type="text"], .task-details select {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .task-details input[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .task-details input[type="submit"]:hover {
+      background-color: #3e8e41;
+    }
+    .sidebar a {
+      text-decoration: none;
+      color: black;
+      align-text: center;
+    }
+
+    .sidebar a:visited {
+      text-decoration: none;
+      color: black;
+      align-text: center;
+    }
+
+    .sidebar a:hover {
+      text-decoration: none;
+      align-text: center;
+      color: black;
+    }
+
+    /* Added Styles for Comments Section */
+    .comments-section {
+      padding-top: 2em;
+    }
+
+    .comments-section table {
+      margin-top: 1em;
+    }
+
+    /* Form Styles */
+    form {
+      margin-top: 1em;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5em;
+    }
+
+    input[type="text"] {
+      margin-bottom: 1em;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="task-details">
+    <h2 th:text="${Task.name}"></h2>
+    <table>
+      <tr>
+        <th>Description:</th>
+        <td th:text="${Task.description}"></td>
+      </tr>
+      <tr>
+        <th>Creation Date:</th>
+        <td th:text="${Task.creationDate}"></td>
+      </tr>
+      <tr>
+        <th>Due Date:</th>
+        <td th:text="${Task.setDueDate}"></td>
+      </tr>
+      <tr>
+        <th>Status:</th>
+        <td th:text="${Task.status}"></td>
+      </tr>
+      <tr>
+        <th>Priority:</th>
+        <td th:text="${Task.priority}"></td>
+      </tr>
+
+      <tr>
+        <th>Collaborators:</th>
+        <td th:text="${userList}"></td>
+      </tr>
+
+    </table>
+
+    <h3 style="padding-top: 2em">Comments</h3>
+    <table>
+      <tr>
+        <th>User</th>
+        <th>Description</th>
+      </tr>
+      <div th:each="comment : ${Comments}">
+        <tr>
+          <td th:text="${comment.users.username}"></td>
+          <td th:text="${comment.Description}"></td>
+        </tr>
+      </div>
+    </table>
+    <button onclick="downloadAsPDF()">Download as PDF</button>
+
+  </div>
+</div>
+
+<script th:inline="javascript">
+    function downloadAsPDF() {
+      // Get the HTML content to be converted
+      const htmlContent = document.documentElement.outerHTML;
+
+      // Create configuration for html2pdf
+      const pdfOptions = {
+        margin: 10,
+        filename: 'document.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      // Use html2pdf library to generate PDF
+      html2pdf().from(htmlContent).set(pdfOptions).outputPdf(pdf => {
+        // Trigger download
+        const blob = new Blob([pdf], { type: 'application/pdf' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = pdfOptions.filename;
+        link.click();
+      });
+    }
+  </script>
+</body>
+</html>

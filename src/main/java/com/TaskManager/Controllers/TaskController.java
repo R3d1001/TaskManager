@@ -1,8 +1,10 @@
 package com.TaskManager.Controllers;
 
+import com.TaskManager.Repositories.CommentsRepository;
 import com.TaskManager.Repositories.TaskRepository;
 import com.TaskManager.Repositories.UserRepository;
 import com.TaskManager.Repositories.UserTasksRepository;
+import com.TaskManager.entities.Comments;
 import com.TaskManager.entities.Tasks;
 import com.TaskManager.entities.UserTask;
 import com.TaskManager.entities.Users;
@@ -18,7 +20,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
@@ -33,8 +39,52 @@ public class TaskController {
     UserRepository userRepository;
 
     @Autowired
+    CommentsRepository commentsRepository;
+
+    @Autowired
     TaskRepository taskRepository;
 
+//    @GetMapping("tasklist")
+//    public String GetTasks(Model model, @RequestParam(name="task", defaultValue = "-1") String taskID ){
+//
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//        List<Tasks> tasks = userTasksRepository.findByEmail(userDetails.getUsername());
+//        int input = Integer.parseInt(taskID);
+//        Tasks task;
+//        if(input == -1) task = tasks.get(0);
+//        else task = taskRepository.findByTaskID(input).get(0);
+//        model.addAttribute("Task", task);
+//        model.addAttribute("tasklist", userTasksRepository.findByEmail(userDetails.getUsername()));
+//        List<Users> userList = userTasksRepository.findByTaskID(input);
+//        String emails = "";
+//        for (Users u : userList) emails += u.email + ", ";
+//        model.addAttribute("userList", emails);
+//        model.addAttribute("Comments", commentsRepository.findByTaskID(input));
+//
+//        String htmlContent = // Thymeleaf processing logic
+//
+//        try {
+//            // Generate PDF from HTML using Flying Saucer
+//            ITextRenderer renderer = new ITextRenderer();
+//            renderer.setDocumentFromString(htmlContent);
+//            renderer.layout();
+//            File outputFile = File.createTempFile("generatedTaskList", ".pdf");
+//            try (OutputStream os = new FileOutputStream(outputFile)) {
+//                renderer.createPDF(os);
+//            }
+//
+//            // Provide the file path to the generated PDF file in the model
+//            model.addAttribute("generatedPdfFilePath", outputFile.getAbsolutePath());
+//
+//        } catch (Exception e) {
+//            // Handle exceptions appropriately
+//            e.printStackTrace();
+//        }
+//
+//        return "TaskView";
+//            return "TaskView";
+//    }
     @GetMapping("tasklist")
     public String GetTasks(Model model, @RequestParam(name="task", defaultValue = "-1") String taskID ){
 
@@ -47,19 +97,26 @@ public class TaskController {
         else task = taskRepository.findByTaskID(input).get(0);
         model.addAttribute("Task", task);
         model.addAttribute("tasklist", userTasksRepository.findByEmail(userDetails.getUsername()));
+        List<Users> userList = userTasksRepository.findByTaskID(input);
+        String emails = "";
+        for (Users u : userList) emails += u.email + ", ";
+        model.addAttribute("userList", emails);
+        model.addAttribute("Comments", commentsRepository.findByTaskID(input));
             return "TaskView";
     }
 
     @PostMapping(path="/createtask") // Map ONLY POST Requests
     public String addNewTask (@RequestParam String name, @RequestParam String description,
-                              @RequestParam String DueDate, @RequestParam int priority) {
+                              @RequestParam String DueDate, @RequestParam int priority, @RequestParam String emails) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
 
+        String[] emailList = emails.split(" ");
         Tasks t = new Tasks();
         t.name = name;
         t.description = description;
         t.priority = priority;
+
         t.creationDate = new Timestamp(System.currentTimeMillis());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -71,9 +128,21 @@ public class TaskController {
         taskRepository.save(t);
 
         UserTask ut = new UserTask();
+
+
         ut.task = t;
         ut.user = u;
         userTasksRepository.save(ut);
+
+        for(String e : emailList){
+            Users user = userRepository.findByEmail(e);
+            ut = new UserTask();
+            ut.task = t;
+            ut.user = user;
+            userTasksRepository.save(ut);
+
+        }
+
 
         return "redirect:createtask";
     }
@@ -101,4 +170,16 @@ public class TaskController {
         return new ResponseEntity<Tasks>(task, HttpStatus.OK );
     }
 
+    @PostMapping("/api/addcomment")
+    public String addComment(@RequestParam int taskID, @RequestParam String Description){
+        Comments comment = new Comments();
+        comment.Description = Description;
+        comment.task = taskRepository.findByTaskID(taskID).get(0);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        comment.users = userRepository.findByEmail(userDetails.getUsername());
+
+        commentsRepository.save(comment);
+        return "redirect:/tasklist?task=" + taskID;
+    }
 }

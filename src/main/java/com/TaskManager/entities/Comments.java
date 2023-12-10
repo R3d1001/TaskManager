@@ -17,4 +17,7 @@ public class Comments {
     @JoinColumn(name = "userID")
     public Users users;
 
+
+    public String Description;
+
 }
