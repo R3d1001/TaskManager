@@ -20,7 +20,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
@@ -40,6 +44,47 @@ public class TaskController {
     @Autowired
     TaskRepository taskRepository;
 
+//    @GetMapping("tasklist")
+//    public String GetTasks(Model model, @RequestParam(name="task", defaultValue = "-1") String taskID ){
+//
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//        List<Tasks> tasks = userTasksRepository.findByEmail(userDetails.getUsername());
+//        int input = Integer.parseInt(taskID);
+//        Tasks task;
+//        if(input == -1) task = tasks.get(0);
+//        else task = taskRepository.findByTaskID(input).get(0);
+//        model.addAttribute("Task", task);
+//        model.addAttribute("tasklist", userTasksRepository.findByEmail(userDetails.getUsername()));
+//        List<Users> userList = userTasksRepository.findByTaskID(input);
+//        String emails = "";
+//        for (Users u : userList) emails += u.email + ", ";
+//        model.addAttribute("userList", emails);
+//        model.addAttribute("Comments", commentsRepository.findByTaskID(input));
+//
+//        String htmlContent = // Thymeleaf processing logic
+//
+//        try {
+//            // Generate PDF from HTML using Flying Saucer
+//            ITextRenderer renderer = new ITextRenderer();
+//            renderer.setDocumentFromString(htmlContent);
+//            renderer.layout();
+//            File outputFile = File.createTempFile("generatedTaskList", ".pdf");
+//            try (OutputStream os = new FileOutputStream(outputFile)) {
+//                renderer.createPDF(os);
+//            }
+//
+//            // Provide the file path to the generated PDF file in the model
+//            model.addAttribute("generatedPdfFilePath", outputFile.getAbsolutePath());
+//
+//        } catch (Exception e) {
+//            // Handle exceptions appropriately
+//            e.printStackTrace();
+//        }
+//
+//        return "TaskView";
+//            return "TaskView";
+//    }
     @GetMapping("tasklist")
     public String GetTasks(Model model, @RequestParam(name="task", defaultValue = "-1") String taskID ){
 

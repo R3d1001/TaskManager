@@ -27,6 +27,11 @@
 			<version>9.1.20</version> <!-- Use the latest version available -->
 		</dependency>
 		<dependency>
+			<groupId>com.ironsoftware</groupId>
+			<artifactId>com.ironsoftware</artifactId>
+			<version>2023.12.1</version>
+		</dependency>
+		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
 			<!-- Temporary explicit version to fix Thymeleaf bug -->
